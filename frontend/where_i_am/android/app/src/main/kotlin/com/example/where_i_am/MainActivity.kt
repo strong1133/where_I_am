@@ -1,4 +1,4 @@
-package com.example.where_i_am
+package com.strong.wiam
 
 import io.flutter.embedding.android.FlutterActivity
 
