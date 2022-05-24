@@ -1,9 +1,25 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_fcm/flutter_fcm.dart';
+import 'package:get/get.dart';
 
-class FcmService {
+class FcmService extends GetxService {
   static String token = 'token';
+
+  @override
+  void onInit() {
+    initFCM();
+    // TODO: implement onInit
+    super.onInit();
+  }
+
+  static Future<void> onNotificationReceived(RemoteMessage message) async {
+    await Firebase.initializeApp();
+    print("MSG RECE");
+    print('Handling a message ${message.data}');
+    print('Handling a message ${message.notification}');
+    print('Handling a message ${message.mutableContent}');
+  }
 
   static initFCM() async {
     try {
@@ -12,11 +28,11 @@ class FcmService {
             FcmService.token = token!;
             print(token);
           },
-          onNotificationReceived: (RemoteMessage message) {
-            Future<void> fc = message as Future<void>;
-            return fc;
+          onNotificationReceived: onNotificationReceived,
+          onNotificationPressed: (Map<String, dynamic> data) {
+            print(data);
           },
-          icon: 'icon');
+          icon: 'ic_launcher');
     } catch (e) {}
   }
 }
