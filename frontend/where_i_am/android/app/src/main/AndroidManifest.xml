@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.strong.wiam">
+    package="com.underjoy.wiam">
    <application
         android:label="where_i_am"
         android:name="${applicationName}"

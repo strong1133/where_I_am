@@ -1,4 +1,4 @@
-package com.strong.wiam
+package com.underjoy.wiam
 
 import io.flutter.embedding.android.FlutterActivity
 
