@@ -1,0 +1,29 @@
+# docker swarm yml
+#  - docker swarm only supports overlay networks.
+version: "3.5"
+services:
+  registry:
+    image: registry:latest
+    ports:
+      - 5000:5000
+    deploy:
+      mode: replicated
+      replicas: 1
+    volumes:
+      - /home/strong1133/docker/strong_docker_registry/data:/var/lib/registry
+    restart: always
+    networks:
+      - s-net
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+
+networks:
+  strong-net:
+    driver: overlay
+
+
+# Stack Deploy cmd
+# docker stack deploy -c /home/strong1133/docker/strong_docker_registry/docker_swarm.yml  strongserver
