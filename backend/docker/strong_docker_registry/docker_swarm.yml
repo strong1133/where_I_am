@@ -13,7 +13,7 @@ services:
       - /home/strong1133/docker/strong_docker_registry/data:/var/lib/registry
     restart: always
     networks:
-      - s-net
+      - strong-net
     logging:
       driver: "json-file"
       options:
