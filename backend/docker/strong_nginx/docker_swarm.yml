@@ -4,7 +4,18 @@ services:
   nginxgw:
     image: nginxgw:v_1.0.0
     ports:
-      - 5000:5000 
+      - mode: host
+        protocol: tcp
+        published: 80
+        target: 80
+      - mode: host
+        protocol: tcp
+        published: 443
+        target: 443
+      - mode: host
+        protocol: tcp
+        published: 8080
+        target: 8080  
     deploy:
       mode: replicated
       replicas: 1
