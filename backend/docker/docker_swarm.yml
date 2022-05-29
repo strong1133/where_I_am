@@ -1,0 +1,30 @@
+version: "3.5"
+services:
+  wiam_back:
+    image: docker.strongsub.com/strong_wiam_back:${VER:-latest}
+    ports:
+      - 3000:3000
+    deploy:
+      mode: replicated
+      replicas: ${REPLICAS:-3}
+      update_config:
+        parallelism: 1
+        order: start-first
+        delay: 5s
+        failure_action: rollback
+    command: ["--configPath", "/config", "-c", "beta_config.json"]
+    volumes:
+      - /home/strong1133/docker/strong_wiam_back/data:/app/public
+      - /home/strong1133/docker/strong_wiam_back/config:/config
+    restart: always
+    networks:
+      - strong-net
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+
+networks:
+  strong-net:
+    driver: overlay
