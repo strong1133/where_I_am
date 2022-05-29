@@ -1,4 +1,4 @@
-FROM node:14.17.4 
+FROM node:14
 MAINTAINER strong3879 <strong3879@gmail.com>
 
 RUN mkdir -p /app

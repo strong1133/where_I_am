@@ -1,16 +1,23 @@
 # docker swarm yml
 #  - docker swarm only supports overlay networks.
-version: "3.5"
+version: "3"
 services:
   registry:
-    image: registry:latest
+    image: registry:2
     ports:
       - 5000:5000
     deploy:
       mode: replicated
       replicas: 1
+    # environment:
+    #   REGISTRY_AUTH: htpasswd
+    #   REGISTRY_AUTH_HTPASSWD_REALM: Registry
+    #   REGISTRY_AUTH_HTPASSWD_PATH: /auth/registry.password
+    #   REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /data
+
     volumes:
-      - /home/strong1133/docker/strong_docker_registry/data:/var/lib/registry
+      - /home/strong1133/docker/strong_docker_registry/data:/data
+      - /home/strong1133/docker/strong_docker_registry/auth:/auth
     restart: always
     networks:
       - strong-net
