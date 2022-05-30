@@ -4,9 +4,9 @@ var router = express.Router();
 const controller = require("../controllers/msgController");
 const { responseDtoJson } = require("../utils/responseDto");
 
-router.post("/push", function (req, res, next) {
+router.post("/push",  (req, res) =>{
 
-        
+
     controller.psuhMsg(req.body, (err, value) => {
         responseDtoJson(err, value, res);
     });
