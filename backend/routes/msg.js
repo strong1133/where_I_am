@@ -1,10 +1,15 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
 
+const controller = require("../controllers/msgController");
+const { responseDtoJson } = require("../utils/responseDto");
 
-router.post('/push', function(req, res, next) {
-    
+router.post("/push", function (req, res, next) {
+
+        
+    controller.psuhMsg(req.body, (err, value) => {
+        responseDtoJson(err, value, res);
+    });
 });
 
-
-module.exports = router
+module.exports = router;

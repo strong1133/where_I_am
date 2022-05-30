@@ -6,7 +6,7 @@ const app = require("../app");
 describe("GET /user 는", () => {
     describe("성공시", () => {
         it("200을 반환한다.", (done) => {
-            request(app).get('/users').expect(200).end(done);
+            request(app).get('/user').expect(200).end(done);
         });
     });
 });
