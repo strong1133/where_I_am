@@ -7,7 +7,7 @@ const msgController = {
      */
     psuhMsg: async (req, callback) => {
         console.log(req);
-
+        
         callback(null, req)
     },
 };
