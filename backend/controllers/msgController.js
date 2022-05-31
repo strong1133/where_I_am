@@ -1,3 +1,5 @@
+const logger = require("../utils/logger");
+
 const msgController = {
     /**
      * Push 알람을 발송한다.
@@ -5,10 +7,13 @@ const msgController = {
      * @param {Function}  리턴 콜백 함수
      * @returns {Map}  {"userId":"", "flag":""}
      */
-    psuhMsg: async (req, callback) => {
-        console.log(req);
+    pushMsg: async (req, callback) => {
+        let param = req;
+        logger('msgController',' Controller', true, param)
+
         
-        callback(null, req)
+
+        callback(null, req);
     },
 };
 

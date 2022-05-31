@@ -27,9 +27,12 @@ describe("Post /msg/push 는", () => {
                 });
                 done()
         });
-        it("요청 된 userId와 push 성공유무를 반환한다.", (done) => {
-            console.log(body)
+        it("Response Dto 를 Object로 반환한다.", (done) => {
             body.should.have.property("data").instanceOf(Object);
+            done();
+        });
+        it("요청 된 userId와 push 성공유무를 반환한다.", (done) => {
+            body.should.have.property("data").have.property('pushFlag').instanceOf(Boolean)
             done();
         });
     });
