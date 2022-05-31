@@ -11,7 +11,7 @@ const msgController = {
      */
     pushMsg: async (req, callback) => {
         let param = req;
-        logger('msgController',' Controller', true, param)
+        // logger('msgController',' Controller', true, param)
         logger('msgController',' Controller', true, param['deviceToken'])
 
         if(!param['deviceToken']){

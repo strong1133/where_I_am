@@ -43,7 +43,8 @@ describe("Post /msg/push 는", () => {
         });
 
         // it("push 실패시 500을 응답한다.", (done) => {
-        //     request(app).post("/msg/push").send({ deviceToken: "testT2222oken1", userId: "tjrwls455" }).expect(500).end(done);
+        //     request(app).post("/msg/push").send({ deviceToken: "testT2222oken1", userId: "tjrwls455" }).expect(500)
+        //     .should.have.property("data").have.property("pushFlag").false
         // });
     });
 });
