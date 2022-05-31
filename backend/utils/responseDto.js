@@ -13,11 +13,11 @@ const responseBody = (err, value, code) => {
 
 module.exports = {
     responseBody:responseBody,
-    responseDtoJson: (err, value, res) => {
+    responseDtoJson: (err, errCode, value, res) => {
         if (err) {
-            console.error("ERR :: ", err);
-
-            return res.status(500).json(responseBody(err, value, 500));
+            console.error("ERR :: ", err.message);
+            
+            return res.status(errCode? errCode: 500).json(responseBody(err, value, errCode? errCode: 500));
         } else {
             if (!value) {
                 console.error("ERR :: No Such Data");

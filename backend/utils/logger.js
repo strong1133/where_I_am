@@ -11,7 +11,7 @@ const Logger = (name, tpye, entry, content )=>{
 
     console.log(
 
-        `:: < DEBUG > ::  ${name} (${tpye})  >> ${entry? 'ENTRY' : 'FIN'}   @@`, content
+        `\u001b[36;1m :: < DEBUG > ::  ${name} (${tpye})  >> ${entry? 'ENTRY' : 'FIN'}   @@`, content +'\n \x1B[0m'
     )
 
 }

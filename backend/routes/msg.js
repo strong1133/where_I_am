@@ -7,8 +7,8 @@ const { responseDtoJson } = require("../utils/responseDto");
 router.post("/push",  (req, res) =>{
 
 
-    controller.pushMsg(req.body, (err, value) => {
-        responseDtoJson(err, value, res);
+    controller.pushMsg(req.body, (err, errCode, value ) => {
+        responseDtoJson(err, errCode, value, res);
     });
 });
 

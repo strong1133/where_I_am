@@ -1,5 +1,7 @@
 const logger = require("../utils/logger");
 
+const {fcmService} = require('../services/fcmService');
+
 const msgController = {
     /**
      * Push 알람을 발송한다.
@@ -10,10 +12,15 @@ const msgController = {
     pushMsg: async (req, callback) => {
         let param = req;
         logger('msgController',' Controller', true, param)
+        logger('msgController',' Controller', true, param['deviceToken'])
 
-        
+        if(!param['deviceToken']){
+            let err = new Error('Invaild deviceToken');
+            return callback(err,400, null);
+        }
+        let resBody = fcmService(param);
 
-        callback(null, req);
+        callback(null,null, resBody);
     },
 };
 
