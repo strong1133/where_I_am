@@ -1,7 +1,7 @@
 version: "3.5"
 services:
   wiam_back:
-    image: docker.strongsub.com/strong_wiam_back:${VER:-latest}
+    image: docker.<domain>.com/strong_wiam_back:${VER:-latest}
     ports:
       - 3000:3000
     deploy:
