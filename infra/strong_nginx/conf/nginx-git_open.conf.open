@@ -1,0 +1,233 @@
+user www-data;
+worker_processes auto;
+pid /run/nginx.pid;
+
+events{
+    worker_connections 8192;
+}
+
+http{
+    ## Basic Settings
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    types_hash_max_size 2048;
+
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    ## Log Settings
+    access_log /dev/stdout;
+    error_log /dev/stdout;
+
+    ## Gzip Settings
+    gzip on;
+    gzip_disable "msie6";
+
+    ##Server Settings
+    
+    ## Http
+    server{
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        client_max_body_size 30M;
+
+        listen 80;
+    }
+
+    ## Https
+    server{
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        client_max_body_size 30M;
+
+        listen 443;
+
+        ssl on;
+        ssl_certificate /etc/nginx/ssl/live/<<domain>>/fullchain.pem;
+        ssl_certificate_key /etc/nginx/ssl/live/<<domain>>/privkey.pem;
+        # ssl_dhparam /etc/nginx/dhparam/dhparam-2048.pem;
+        ssl_buffer_size 8k;
+        ssl_protocols TLSv1.2 TLSv1.1 TLSv1;
+        ssl_prefer_server_ciphers on;
+        ssl_ciphers ECDH+AESGCM:ECDH+AES256:ECDH+AES128:DH+3DES:!ADH:!AECDH:!MD5;
+
+    }
+
+    ##
+    ## Docker Registry
+    server{
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        client_max_body_size 16384M;
+        
+
+        listen 80;
+        server_name docker.<<domain>>;
+        location / {
+            resolver 127.0.0.11;
+            set $<< Docker Swarm Image >> registry:5000;
+            proxy_pass http://$<< Docker Swarm Image >>;
+            proxy_buffering on;
+            proxy_buffer_size 64k;
+            proxy_buffers 4 512k;
+            proxy_busy_buffers_size 512k;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $remote_addr;
+            proxy_set_header X-Forwarded-Host $host;
+        }
+    }
+
+    server{
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        client_max_body_size 16384M;
+
+        listen 443;
+        server_name docker.<<domain>>;
+
+        ssl on;
+        ssl_certificate /etc/nginx/ssl/live/<<domain>>/fullchain.pem;
+        ssl_certificate_key /etc/nginx/ssl/live/<<domain>>/privkey.pem;
+        # ssl_dhparam /etc/nginx/dhparam/dhparam-2048.pem;
+        ssl_buffer_size 8k;
+        ssl_protocols TLSv1.2 TLSv1.1 TLSv1;
+        ssl_prefer_server_ciphers on;
+        ssl_ciphers ECDH+AESGCM:ECDH+AES256:ECDH+AES128:DH+3DES:!ADH:!AECDH:!MD5;
+
+        location / {
+            resolver 127.0.0.11;
+            set $<< Docker Swarm Image >> registry:5000;
+            proxy_pass http://$<< Docker Swarm Image >>;
+            proxy_buffering on;
+            proxy_buffer_size 64k;
+            proxy_buffers 4 512k;
+            proxy_busy_buffers_size 512k;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $remote_addr;
+            proxy_set_header X-Forwarded-Host $host;
+        }
+    }
+
+    ##
+    ## WIAM API
+    server{
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        client_max_body_size 16384M;
+        
+
+        listen 80;
+        server_name wiam-api.<<domain>>;
+        location / {
+            resolver 127.0.0.11;
+            set $<< Docker Swarm Image >> wiam_back:3000;
+            proxy_pass http://$<< Docker Swarm Image >>;
+            proxy_buffering on;
+            proxy_buffer_size 64k;
+            proxy_buffers 4 512k;
+            proxy_busy_buffers_size 512k;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $remote_addr;
+            proxy_set_header X-Forwarded-Host $host;
+        }
+    }
+
+    server{
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        client_max_body_size 16384M;
+
+        listen 443;
+        server_name wiam-api.<<domain>>;
+
+        ssl on;
+        ssl_certificate /etc/nginx/ssl/live/<<domain>>/fullchain.pem;
+        ssl_certificate_key /etc/nginx/ssl/live/<<domain>>/privkey.pem;
+        # ssl_dhparam /etc/nginx/dhparam/dhparam-2048.pem;
+        ssl_buffer_size 8k;
+        ssl_protocols TLSv1.2 TLSv1.1 TLSv1;
+        ssl_prefer_server_ciphers on;
+        ssl_ciphers ECDH+AESGCM:ECDH+AES256:ECDH+AES128:DH+3DES:!ADH:!AECDH:!MD5;
+
+        location / {
+            resolver 127.0.0.11;
+            set $<< Docker Swarm Image >> wiam_back:3000;   
+            proxy_pass http://$<< Docker Swarm Image >>;
+            proxy_buffering on;
+            proxy_buffer_size 64k;
+            proxy_buffers 4 512k;
+            proxy_busy_buffers_size 512k;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $remote_addr;
+            proxy_set_header X-Forwarded-Host $host;
+        }
+    }
+
+    ##
+    ## YOIT API
+    server{
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        client_max_body_size 16384M;
+        
+
+        listen 80;
+        server_name yoit-api.<<domain>>;
+        location / {
+            resolver 127.0.0.11;
+            set $<< Docker Swarm Image >> yoit_back:4000;
+            proxy_pass http://$<< Docker Swarm Image >>;
+            proxy_buffering on;
+            proxy_buffer_size 64k;
+            proxy_buffers 4 512k;
+            proxy_busy_buffers_size 512k;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $remote_addr;
+            proxy_set_header X-Forwarded-Host $host;
+        }
+    }
+
+    server{
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        client_max_body_size 16384M;
+
+        listen 443;
+        server_name yoit-ap.<<domain>>;
+
+        ssl on;
+        ssl_certificate /etc/nginx/ssl/live/<<domain>>/fullchain.pem;
+        ssl_certificate_key /etc/nginx/ssl/live/<<domain>>/privkey.pem;
+        # ssl_dhparam /etc/nginx/dhparam/dhparam-2048.pem;
+        ssl_buffer_size 8k;
+        ssl_protocols TLSv1.2 TLSv1.1 TLSv1;
+        ssl_prefer_server_ciphers on;
+        ssl_ciphers ECDH+AESGCM:ECDH+AES256:ECDH+AES128:DH+3DES:!ADH:!AECDH:!MD5;
+
+        location / {
+            resolver 127.0.0.11;
+            set $<< Docker Swarm Image >> yoit_back:4000;   
+            proxy_pass http://$<< Docker Swarm Image >>;
+            proxy_buffering on;
+            proxy_buffer_size 64k;
+            proxy_buffers 4 512k;
+            proxy_busy_buffers_size 512k;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $remote_addr;
+            proxy_set_header X-Forwarded-Host $host;
+        }
+    }
+
+}
+
+daemon off;
