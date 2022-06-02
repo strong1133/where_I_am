@@ -7,7 +7,7 @@ fcmAdmin.initializeApp({
     credential: fcmAdmin.credential.cert(serviceAccount),
 });
 
-const fcmService = (req, res) => {
+const fcmService = async (req, res) => {
     logger("fcmService", " Service", true, req);
 
     let fcmParam = {
@@ -23,7 +23,7 @@ const fcmService = (req, res) => {
         token: req["deviceToken"],
     };
 
-    fcmAdmin
+    await fcmAdmin
         .messaging()
         .send(message)
         .then((response) => {
@@ -34,6 +34,8 @@ const fcmService = (req, res) => {
             console.log("발송 실패 , ", err);
             fcmParam["pushFlag"] = false;
         });
+
+    console.log(fcmParam);
 
     return fcmParam;
 };

@@ -1,6 +1,6 @@
 const logger = require("../utils/logger");
 
-const {fcmService} = require('../services/fcmService');
+const { fcmService } = require("../services/fcmService");
 
 const msgController = {
     /**
@@ -12,15 +12,20 @@ const msgController = {
     pushMsg: async (req, callback) => {
         let param = req;
         // logger('msgController',' Controller', true, param)
-        logger('msgController',' Controller', true, param['deviceToken'])
+        logger("msgController", " Controller", true, param["deviceToken"]);
 
-        if(!param['deviceToken']){
-            let err = new Error('Invaild deviceToken');
-            return callback(err,400, null);
+        if (!param["deviceToken"]) {
+            let err = new Error("Invaild deviceToken");
+            return callback(err, 400, null);
         }
-        let resBody = fcmService(param);
 
-        callback(null,null, resBody);
+        let resBody = await fcmService(param);
+        if (!resBody["pushFlag"]) {
+            let err = new Error("Fcm Failed");
+            return callback(err, 500, resBody);
+        }
+
+        callback(null, null, resBody);
     },
 };
 
