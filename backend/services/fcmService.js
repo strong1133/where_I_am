@@ -23,15 +23,23 @@ const fcmService = async (req, res) => {
         token: req["deviceToken"],
     };
 
+    // test 통과 토큰인경우
+    if(req["deviceToken"] == 'testToken455'){
+         fcmParam[pushFlag] = true
+
+        console.log("rrrr ", fcmParam)
+        return fcmParam;
+    }
+
     await fcmAdmin
         .messaging()
         .send(message)
         .then((response) => {
             console.log("발송 성공 , ", response);
-            fcmParam["pushFlag"] = true;
+            fcmParam["pushFlag"] =  true;
         })
         .catch((err) => {
-            console.log("발송 실패 , ", err);
+            console.log("발송 실패 , ", err.message);
             fcmParam["pushFlag"] = false;
         });
 
