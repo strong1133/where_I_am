@@ -25,7 +25,7 @@ const fcmService = async (req, res) => {
 
     // test 통과 토큰인경우
     if(req["deviceToken"] == 'testToken455'){
-         fcmParam[pushFlag] = true
+         fcmParam['pushFlag'] = true
 
         console.log("rrrr ", fcmParam)
         return fcmParam;
